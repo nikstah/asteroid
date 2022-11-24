@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+## Asteroids &#128640;
+
+With this React App you can browse daily close encounter asteroids. Data provided by [NASA API](https://api.nasa.gov/).
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
