@@ -8,34 +8,83 @@ import { Button } from "@mui/material";
 
 import dayjs from "dayjs";
 
+//Three.js imports
+import { useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber"
+import { useLoader } from "@react-three/fiber"
+import { GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+
+const Model = () => {
+  const gltf = useLoader(GLTFLoader, "./astra.gltf")
+  return (
+    <>
+      <primitive object={gltf.scene} scale={10.0} position={[-40,0,-10]} />
+    </>
+  )
+}
+
+//Asteroid Three Dee formatter
+function ThreeAsteroid(props) {
+  // Ref gives direct access to the mesh
+  const mesh = useRef()
+  // State
+  const [hovered, setHover] = useState(false)
+  const [active, setActive] = useState(false)
+  // Subscribe this component to the render-loop & rotate
+  useFrame((state, delta) => (mesh.current.rotation.x += props.rotate[0]))
+  useFrame((state, delta) => (mesh.current.rotation.y += props.rotate[1]))
+  useFrame((state, delta) => (mesh.current.rotation.z += props.rotate[2]))
+  // Return View
+  return (
+    <mesh
+      {... props}
+      ref={mesh}
+      scale={active ? 1.5 : 1}
+      onClick={(event) => setActive(!active)}
+      onPointerOver={(event) => setHover(true)}
+      onPointerOut={(event) => setHover(false)}>
+        {/* <boxGeometry args={props.size} /> */}
+        <capsuleGeometry args={props.size} />
+        <meshStandardMaterial color={hovered ? '#666666' : '#444444'} />
+    </mesh>
+  )
+}
+
+// Asteroid list item formatter
 const Asteroid = ({asteroid}) => {
-    const diameter1 = asteroid.estimated_diameter.meters.estimated_diameter_max.toFixed(0)
-    const diameter2 = asteroid.estimated_diameter.meters.estimated_diameter_min.toFixed(0)
-    const diameters = diameter1 + " x " + diameter2 + " meters"
-    const distance = asteroid.close_approach_data[0].miss_distance.kilometers.split('.')[0] + " km"
-    if (asteroid.close_approach_data[1]) console.log("second value")
-    return <span> {asteroid.name}, {diameters}, {distance} </span>
+    return <span> {asteroid.name}, {asteroid.diameter_max} x {asteroid.diameter_min} meters, {asteroid.distance} km from earth</span>
   }
-  
-const sortAsteroids = (data, theDate) => {
+
+// Fetches asteroids from data and creates a sorted Array by distance from Earth
+const arrangeAsteroids = (data, theDate) => {
   const asteroids = []
   data.near_earth_objects[theDate].forEach(element => {
-      asteroids.push(element)
+      const asteroid = {}
+      asteroid.id = element.id
+      asteroid.name = element.name
+      asteroid.diameter_min = element.estimated_diameter.meters.estimated_diameter_min.toFixed(0)
+      asteroid.diameter_max = element.estimated_diameter.meters.estimated_diameter_max.toFixed(0)
+      asteroid.distance = element.close_approach_data[0].miss_distance.kilometers.split('.')[0]
+      asteroid.rotate = []
+      asteroid.rotate[0] = Math.floor(Math.random()*10)/1000
+      asteroid.rotate[1] = Math.floor(Math.random()*10)/1000
+      asteroid.rotate[2] = Math.floor(Math.random()*10)/1000
+      asteroids.push(asteroid)
   })
   return asteroids.sort( (asteroid1, asteroid2) => {
-      return asteroid1.close_approach_data[0].miss_distance.kilometers - asteroid2.close_approach_data[0].miss_distance.kilometers
+      return asteroid1.distance - asteroid2.distance
     })
 }
-  
+
 export default function Asteroids() {
     
   const [nasaKey, setNasaKey] = useState("DEMO_KEY"); 
-  const [observeDate, setObserveDate] = useState(dayjs("2022-11-12"));
+  const [observeDate, setObserveDate] = useState(dayjs("2022-11-14"));
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setNasaKey(event.target["keyField"].value)
-  };
+};
 
   const InputForm = () => {
     return(
@@ -50,7 +99,6 @@ export default function Asteroids() {
             defaultValue={nasaKey}
           />
           <Button type="submit">Save</Button>
-        </form><br/><br/>
         <DatePicker
           id="datePicker"
           label="Select Date to Observe"
@@ -63,6 +111,7 @@ export default function Asteroids() {
             <TextField size="small" {...params}/>
           }
         />
+        </form>
       </span>
     )
   }
@@ -76,25 +125,26 @@ export default function Asteroids() {
           .then( response => response.json() )
   })
 
-  if (isLoading) return "Loading asteroid data..."
-
-  console.log(nasaKey)
+  if (isLoading) return (
+    <div>
+      <InputForm />
+      <p>Loading asteroid data...</p>
+    </div>
+  )
 
   if (error) return (
     <div>
       <InputForm />
-      <p>An error has occurred: " + {error.message}</p>
+      <p>An error has occurred. {error.message}</p>
     </div>
   )
 
   if (data.error) return (
     <div>
       <InputForm />
-      <p>An error has occurred: " + {data.error.message}</p>
+      <p>An error has occurred. {data.error.message}</p>
     </div>
   )
-
-  console.log(data)
 
   if (data.element_count === 0) return (
     <div>
@@ -103,14 +153,22 @@ export default function Asteroids() {
     </div>
   )
 
-  const sortedAsteroids = sortAsteroids(data, theDate);
+  const asteroids = arrangeAsteroids(data, theDate);
 
   return (
     <div>
       <InputForm />
       <h2>{data.element_count} &#129704; observed on {theDate}</h2>
-      <div>{sortedAsteroids.map( asteroid => ( <span key={asteroid.id} style={{display: "block"}}> &#129704;  <Asteroid asteroid={asteroid} /> </span> ) )}</div>
+      <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block"}}> &#129704; <Asteroid asteroid={asteroid} /> </span> ) )}</div>
+      <div style={{height: 500}}>
+        <Canvas camera={{ fov: 40, near: 0.1, far: 1000, position: [0, 0, 30] }}>
+          <Model />
+          <ambientLight />
+          <pointLight position={[10, 10, 10]} />
+          {asteroids.map((asteroid, index) => (<ThreeAsteroid key={asteroid.id} size={[(asteroid.diameter_min/100), (asteroid.diameter_max/100), 5, 6]} position={[(index*4)-(asteroids.length*4/2), 0, 0]} rotate={asteroid.rotate} />))}
+        </Canvas>
+      </div>
     </div>
-)
+  )
 
 }

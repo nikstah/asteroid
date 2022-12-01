@@ -16,11 +16,12 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <div className="App">
           <header>
-            <h1>Asteroids &#128640;</h1>
-            <p>Data provided by <a href="https://api.nasa.gov/" target="_blank" rel="noreferrer">NASA Asteroids - NeoWs API</a></p>
-            <br/>
+              <span className='myTitle'>Asteroids &#128640;</span>          
+              <span className='intro'>
+              Data provided by <a href="https://api.nasa.gov/" target="_blank" rel="noreferrer">NASA Asteroids - NeoWs API</a>
+              </span>
           </header>
-          <div>
+          <div className="content">
             <Asteroids />
           </div>
         </div>
