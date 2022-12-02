@@ -2,9 +2,8 @@ import { useState } from "react";
 
 import { useQuery } from "@tanstack/react-query"
 
-import TextField from '@mui/material/TextField';
+import { Box, Button, TextField } from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Button } from "@mui/material";
 
 import dayjs from "dayjs";
 
@@ -88,31 +87,50 @@ export default function Asteroids() {
 
   const InputForm = () => {
     return(
-      <span>
-        <form onSubmit={handleSubmit}>
+      <Box
+        onSubmit={handleSubmit}
+        component="form"
+        sx={{
+          '& .MuiTextField-root': { m: 1, width: '25ch' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <div>
           <TextField
             id="keyField"
             label="Enter Valid NASA Key"
-            type="text"
             size="small"
-            style = {{width: 400}} 
+            style={{width: 400, margin: "0px 8px 0px 0px"}} 
             defaultValue={nasaKey}
+            type="text"
           />
-          <Button type="submit">Save</Button>
-        <DatePicker
-          id="datePicker"
-          label="Select Date to Observe"
-          inputFormat="YYYY-MM-DD"
-          value={observeDate}
-          onChange={(newDate) => {
-            setObserveDate(newDate);
-          }}
-          renderInput={(params) => 
-            <TextField size="small" {...params}/>
-          }
-        />
-        </form>
-      </span>
+          <Button 
+            variant="outlined" 
+            size="small" 
+            style={{padding: "7.5px", color: "#223e4b"}} 
+            type="submit"
+          >Save</Button>
+        </div>
+        <div>
+          <DatePicker
+            id="datePicker"
+            label="Select Date to Observe"
+            inputFormat="YYYY-MM-DD"
+            value={observeDate}
+            onChange={(newDate) => {
+              setObserveDate(newDate);
+            }}
+            renderInput={(params) => 
+              <TextField 
+                size="small" 
+                style={{margin: "16px 0px"}}
+                {...params}
+              />
+            }
+          />
+        </div>
+      </Box>
     )
   }
 
@@ -149,7 +167,7 @@ export default function Asteroids() {
   if (data.element_count === 0) return (
     <div>
       <InputForm />
-      <p>0 &#129704; found on given date.</p>
+      <p>0 asteroids found on given date.</p>
     </div>
   )
 
@@ -158,7 +176,7 @@ export default function Asteroids() {
   return (
     <div>
       <InputForm />
-      <h2>{data.element_count} &#129704; observed on {theDate}</h2>
+      <h2>{data.element_count} asteroids observed on {theDate}</h2>
       <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block"}}> &#129704; <Asteroid asteroid={asteroid} /> </span> ) )}</div>
       <div style={{height: 500}}>
         <Canvas camera={{ fov: 40, near: 0.1, far: 1000, position: [0, 0, 30] }}>

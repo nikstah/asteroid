@@ -1,20 +1,24 @@
 .App {
   color: #223e4b;
   text-align: left;
-  margin-left: 50px;
-  margin-top: 50px;
-  font-size: 1em;
+  margin-left: 30px;
+  margin-top: 30px;
+  font-size: 0.8em;
 }
 
 .content {
+  color: #223e4b;
   margin-top: 30px;
 }
 
 .myTitle {
+  color: #223e4b;
   font-size: 2em;
+  margin-bottom: 8px;
 }
 
 .intro {
+  color: #223e4b;
   font-size: 1em;
 }
 
