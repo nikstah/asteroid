@@ -11,7 +11,8 @@ import dayjs from "dayjs";
 import { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber"
 import { useLoader } from "@react-three/fiber"
-import { GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { useEffect } from "react";
 
 const Model = () => {
   const gltf = useLoader(GLTFLoader, "./astra.gltf")
@@ -77,13 +78,15 @@ const arrangeAsteroids = (data, theDate) => {
 
 export default function Asteroids() {
     
-  const [nasaKey, setNasaKey] = useState("DEMO_KEY"); 
+  const [nasaKey, setNasaKey] = useState(
+    window.localStorage.getItem("asteroids-nasa-key") || "DEMO_KEY"
+  ); 
   const [observeDate, setObserveDate] = useState(dayjs("2022-11-14"));
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setNasaKey(event.target["keyField"].value)
-};
+  };
 
   const InputForm = () => {
     return(
@@ -135,6 +138,12 @@ export default function Asteroids() {
   }
 
   const theDate = dayjs(observeDate).format("YYYY-MM-DD")
+
+  useEffect(() => {
+    window.localStorage.setItem("asteroids-nasa-key", nasaKey)
+  },[nasaKey])
+
+  console.log(nasaKey)
 
   const {isLoading, error, data } = useQuery({
       queryKey: [dayjs(observeDate).format("YYYY-MM-DD")],
