@@ -57,9 +57,9 @@ const arrangeAsteroids = (data, theDate) => {
       asteroid.diameter_max = element.estimated_diameter.meters.estimated_diameter_max.toFixed(0)
       asteroid.distance = element.close_approach_data[0].miss_distance.kilometers.split('.')[0]
       asteroid.rotate = []
-      asteroid.rotate[0] = Math.floor(Math.random()*10)/2000
-      asteroid.rotate[1] = Math.floor(Math.random()*10)/2000
-      asteroid.rotate[2] = Math.floor(Math.random()*10)/2000
+      asteroid.rotate[0] = Math.floor(Math.random()*10)/asteroid.diameter_max/10
+      asteroid.rotate[1] = Math.floor(Math.random()*10)/asteroid.diameter_max/10
+      asteroid.rotate[2] = Math.floor(Math.random()*10)/asteroid.diameter_max/10
       asteroids.push(asteroid)
   })
   return asteroids.sort( (asteroid1, asteroid2) => {
