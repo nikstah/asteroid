@@ -3,7 +3,6 @@ import './App.css';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 import { LocalizationProvider } from "@mui/x-date-pickers";
-//import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import Asteroids from './components/Asteroids';

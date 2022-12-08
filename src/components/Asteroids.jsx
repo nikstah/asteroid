@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-import { useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query";
 
 import { Box, Button, TextField } from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -9,19 +9,10 @@ import dayjs from "dayjs";
 
 //Three.js imports
 import { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber"
-import { useLoader } from "@react-three/fiber"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { useEffect } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 
-const Model = () => {
-  const gltf = useLoader(GLTFLoader, "./astra.gltf")
-  return (
-    <>
-      <primitive object={gltf.scene} scale={10.0} position={[-40,0,-10]} />
-    </>
-  )
-}
+import Earth from "./Earth";
+import Probe from "./Probe";
 
 //Asteroid Three Dee formatter
 function ThreeAsteroid(props) {
@@ -66,9 +57,9 @@ const arrangeAsteroids = (data, theDate) => {
       asteroid.diameter_max = element.estimated_diameter.meters.estimated_diameter_max.toFixed(0)
       asteroid.distance = element.close_approach_data[0].miss_distance.kilometers.split('.')[0]
       asteroid.rotate = []
-      asteroid.rotate[0] = Math.floor(Math.random()*10)/1000
-      asteroid.rotate[1] = Math.floor(Math.random()*10)/1000
-      asteroid.rotate[2] = Math.floor(Math.random()*10)/1000
+      asteroid.rotate[0] = Math.floor(Math.random()*10)/2000
+      asteroid.rotate[1] = Math.floor(Math.random()*10)/2000
+      asteroid.rotate[2] = Math.floor(Math.random()*10)/2000
       asteroids.push(asteroid)
   })
   return asteroids.sort( (asteroid1, asteroid2) => {
@@ -189,9 +180,10 @@ export default function Asteroids() {
       <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block"}}> &#129704; <Asteroid asteroid={asteroid} /> </span> ) )}</div>
       <div style={{height: 500}}>
         <Canvas camera={{ fov: 40, near: 0.1, far: 1000, position: [0, 0, 30] }}>
-          <Model />
           <ambientLight />
           <pointLight position={[10, 10, 10]} />
+          <Earth />
+          <Probe />
           {asteroids.map((asteroid, index) => (<ThreeAsteroid key={asteroid.id} size={[(asteroid.diameter_min/100), (asteroid.diameter_max/100), 5, 6]} position={[(index*4)-(asteroids.length*4/2), 0, 0]} rotate={asteroid.rotate} />))}
         </Canvas>
       </div>
