@@ -24,7 +24,7 @@ export default function App() {
             <Asteroids />
           </div>
           <div>
-            <p>This App is made by <a href="https://www.linkedin.com/in/niklaspenttinen/">Niklas Penttinen</a></p>
+            <p>This App is made by <a href="https://niklas.framer.website">Niklas Penttinen</a></p>
           </div>
         </div>
       </QueryClientProvider>
