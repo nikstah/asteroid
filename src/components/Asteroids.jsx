@@ -8,46 +8,20 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 
 //Three.js imports
-import { useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 
+import Asteroid from "./Asteroid";
 import Earth from "./Earth";
 import Probe from "./Probe";
 
-//Asteroid Three Dee formatter
-function ThreeAsteroid(props) {
-  // Ref gives direct access to the mesh
-  const mesh = useRef()
-  // State
-  const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
-  // Subscribe this component to the render-loop & rotate
-  useFrame((state, delta) => (mesh.current.rotation.x += props.rotate[0]))
-  useFrame((state, delta) => (mesh.current.rotation.y += props.rotate[1]))
-  useFrame((state, delta) => (mesh.current.rotation.z += props.rotate[2]))
-  // Return View
-  return (
-    <mesh
-      {... props}
-      ref={mesh}
-      scale={active ? 1.5 : 1}
-      onClick={(event) => setActive(!active)}
-      onPointerOver={(event) => setHover(true)}
-      onPointerOut={(event) => setHover(false)}>
-        {/* <capsuleGeometry args={props.size} /> */}
-        <dodecahedronGeometry args={props.size} />
-        <meshStandardMaterial color={hovered ? '#666666' : '#444444'} />
-    </mesh>
-  )
-}
-
 // Asteroid list item formatter
-const Asteroid = ({asteroid}) => {
+const AsteroidItem = ({asteroid}) => {
     return <span>{asteroid.name}, dia {asteroid.diameter_min} - {asteroid.diameter_max} meters, {asteroid.distance} km from earth</span>
   }
 
 // Fetches asteroids from data and creates a sorted Array by distance from Earth
 const arrangeAsteroids = (data, theDate) => {
+  console.log("Sorting asteroids...")
   const asteroids = []
   data.near_earth_objects[theDate].forEach(element => {
       const asteroid = {}
@@ -58,9 +32,9 @@ const arrangeAsteroids = (data, theDate) => {
       asteroid.diameter = asteroid.diameter_min/100
       asteroid.distance = element.close_approach_data[0].miss_distance.kilometers.split('.')[0]
       asteroid.rotate = []
-      asteroid.rotate[0] = Math.floor(Math.random()*10)/asteroid.diameter/1000
-      asteroid.rotate[1] = Math.floor(Math.random()*10)/asteroid.diameter/1000
-      asteroid.rotate[2] = Math.floor(Math.random()*10)/asteroid.diameter/1000
+      asteroid.rotate[0] = Math.floor(Math.random()*10)/asteroid.diameter/10
+      asteroid.rotate[1] = Math.floor(Math.random()*10)/asteroid.diameter/10
+      asteroid.rotate[2] = Math.floor(Math.random()*10)/asteroid.diameter/10
       asteroids.push(asteroid)
   })
   return asteroids.sort( (asteroid1, asteroid2) => {
@@ -135,12 +109,14 @@ export default function Asteroids() {
     window.localStorage.setItem("asteroids-nasa-key", nasaKey)
   },[nasaKey])
 
-  const {isLoading, error, data } = useQuery({
+  const {isLoading, error, data, fetchStatus } = useQuery({
       queryKey: [dayjs(observeDate).format("YYYY-MM-DD")],
       queryFn: () =>
       fetch("https://api.nasa.gov/neo/rest/v1/feed?start_date=" + theDate + "&end_date="  + theDate + "&api_key=" + nasaKey)
           .then( response => response.json() )
   })
+
+  console.log("fetch status: " + fetchStatus);
 
   if (isLoading) return (
     <div>
@@ -176,15 +152,15 @@ export default function Asteroids() {
     <div>
       <InputForm />
       <h2>{data.element_count} asteroids observed on {theDate}</h2>
-      <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block"}}> &#129704; <Asteroid asteroid={asteroid} /> </span> ) )}</div>
+      {/* <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block", cursor: "pointer"}} > &#129704; <Asteroid asteroid={asteroid} /> </span> ) )}</div> */}
+      <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block", cursor: "pointer"}}> &#129704; <AsteroidItem asteroid={asteroid} /> </span> ) )}</div>
       <div className="myCanvas">
         <Canvas camera={{ fov: 40, near: 0.1, far: 1000, position: [0, 0, 30] }}>
           <ambientLight />
           <pointLight position={[10, 10, 10]} />
           <Earth />
           <Probe />
-          {/* {asteroids.map((asteroid, index) => (<ThreeAsteroid key={asteroid.id} size={[(asteroid.diameter), (asteroid.diameter), 5, 6]} position={[(index*4)-(asteroids.length*4/2), 0, 0]} rotate={asteroid.rotate} />))} */}
-          {asteroids.map((asteroid, index) => (<ThreeAsteroid key={asteroid.id} size={[(asteroid.diameter), 0]} position={[(index*4)-(asteroids.length*4/2), 0, 0]} rotate={asteroid.rotate} />))}
+          {asteroids.map((asteroid, index) => (<Asteroid key={asteroid.id} size={[(asteroid.diameter), 0]} position={[(index*4)-(asteroids.length*4/2), 0, 0]} rotate={asteroid.rotate} />))}
         </Canvas>
       </div>
     </div>
