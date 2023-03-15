@@ -47,7 +47,7 @@ export default function Asteroids() {
   const [nasaKey, setNasaKey] = useState(
     window.localStorage.getItem("asteroids-nasa-key") || "DEMO_KEY"
   ); 
-  const [observeDate, setObserveDate] = useState(dayjs("2023-03-02"));
+  const [observeDate, setObserveDate] = useState(dayjs("2023-03-18"));
 
   const handleSubmit = (event) => {
     event.preventDefault();
