@@ -151,10 +151,12 @@ export default function Asteroids() {
   return (
     <div>
       <InputForm />
-      <h2>{data.element_count} asteroids observed on {theDate}</h2>
-      {/* <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block", cursor: "pointer"}} > &#129704; <Asteroid asteroid={asteroid} /> </span> ) )}</div> */}
-      <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block", cursor: "pointer"}}> &#129704; <AsteroidItem asteroid={asteroid} /> </span> ) )}</div>
-      <div className="myCanvas">
+      <div className="observation-list">
+        <h2>{data.element_count} asteroids observed on {theDate}</h2>
+        {/* <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block", cursor: "pointer"}} > &#129704; <Asteroid asteroid={asteroid} /> </span> ) )}</div> */}
+        <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block", cursor: "pointer"}}> &#129704; <AsteroidItem asteroid={asteroid} /> </span> ) )}</div>
+      </div>
+      <div className="canvas">
         <Canvas camera={{ fov: 40, near: 0.1, far: 1000, position: [0, 0, 30] }}>
           <ambientLight />
           <pointLight position={[10, 10, 10]} />

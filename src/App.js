@@ -13,9 +13,9 @@ export default function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <QueryClientProvider client={queryClient}>
-        <div className="App">
+        <div className="app">
           <header>
-              <h2 className='myTitle'>Asteroids &#128640;</h2>          
+              <h2 className='title'>Asteroids &#128640;</h2>          
               <p className='intro'>
               Search near Earth asteroids by date. Data provided by <a href="https://api.nasa.gov/" className='intro' target="_blank" rel="noreferrer">NASA Asteroids - NeoWs API</a>
               </p>
