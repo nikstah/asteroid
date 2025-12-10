@@ -4,7 +4,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 const Earth = () => {
     const gltf = useLoader(GLTFLoader, "./astra.gltf")
     return (
-        <primitive object={gltf.scene} scale={10.0} position={[-40,0,-10]} />
+        <primitive object={gltf.scene} scale={8.0} position={[-30,0,-10]} />
     )
   }
 

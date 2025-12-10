@@ -48,6 +48,7 @@ export default function Asteroids() {
     window.localStorage.getItem("asteroids-nasa-key") || "DEMO_KEY"
   ); 
   const [observeDate, setObserveDate] = useState(dayjs("2023-03-18"));
+  const [orbit, setOrbit] = useState(true)
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -93,11 +94,16 @@ export default function Asteroids() {
             renderInput={(params) => 
               <TextField 
                 size="small" 
-                style={{margin: "16px 0px"}}
+                style={{margin: "16px -4px 0px 0px"}}
                 {...params}
               />
             }
           />
+          <Button
+            variant="outlined" 
+            style={{margin: "15px", padding: "7.5px", color: "#223e4b", width:200}}
+            onClick={(event) => setOrbit(!orbit)} 
+          >{orbit ? "Stop orbiting" : "Restart orbiting"}</Button>
         </div>
       </Box>
     )
@@ -151,9 +157,8 @@ export default function Asteroids() {
   return (
     <div>
       <InputForm />
-      <div className="observation-list">
+      <div>
         <h2>{data.element_count} asteroids observed on {theDate}</h2>
-        {/* <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block", cursor: "pointer"}} > &#129704; <Asteroid asteroid={asteroid} /> </span> ) )}</div> */}
         <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block", cursor: "pointer"}}> &#129704; <AsteroidItem asteroid={asteroid} /> </span> ) )}</div>
       </div>
       <div className="canvas">
@@ -162,7 +167,14 @@ export default function Asteroids() {
           <pointLight position={[10, 10, 10]} />
           <Earth />
           <Probe />
-          {asteroids.map((asteroid, index) => (<Asteroid key={asteroid.id} size={[(asteroid.diameter), 0]} position={[(index*4)-(asteroids.length*4/2), 0, 0]} rotate={asteroid.rotate} />))}
+          {asteroids.map((asteroid, index) => (
+            <Asteroid
+              key={asteroid.id}
+              size={[(asteroid.diameter), 0]}
+              position={[(index*4)-(asteroids.length*4/2), 0, 0]}
+              rotate={asteroid.rotate}
+              orbit={orbit}
+            />))}
         </Canvas>
       </div>
     </div>
