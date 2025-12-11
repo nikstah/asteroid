@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { useQuery } from "@tanstack/react-query";
 
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import dayjs from "dayjs";
@@ -60,29 +60,10 @@ export default function Asteroids() {
       <Box
         onSubmit={handleSubmit}
         component="form"
-        sx={{
-          '& .MuiTextField-root': { m: 1, width: '25ch' },
-        }}
         noValidate
         autoComplete="off"
       >
-        <div>
-          <TextField
-            id="keyField"
-            label="Enter Valid NASA Key"
-            size="small"
-            style={{width: 400, margin: "0px 8px 0px 0px"}} 
-            defaultValue={nasaKey}
-            type="text"
-          />
-          <Button 
-            variant="outlined" 
-            size="small" 
-            style={{padding: "7.5px", color: "#223e4b"}} 
-            type="submit"
-          >Save</Button>
-        </div>
-        <div>
+        <div style={{height: "50px"}}>
           <DatePicker
             id="datePicker"
             label="Select Date to Observe"
@@ -94,16 +75,33 @@ export default function Asteroids() {
             renderInput={(params) => 
               <TextField 
                 size="small" 
-                style={{margin: "16px -4px 0px 0px"}}
+                // style={{margin: "16px -4px 0px 0px"}}
+                style={{width: 200, margin: "0px 8px 0px 0px"}}
                 {...params}
               />
             }
           />
           <Button
             variant="outlined" 
-            style={{margin: "15px", padding: "7.5px", color: "#223e4b", width:200}}
+            // style={{margin: "15px", padding: "7.5px", color: "#223e4b", width:130}}
+            style={{color: "#223e4b", width:100, height: 40}}
             onClick={(event) => setOrbit(!orbit)} 
-          >{orbit ? "Stop orbiting" : "Restart orbiting"}</Button>
+          >{orbit ? "Freeze" : "Restart"}</Button>
+        </div>
+        <div>
+          <TextField
+            id="keyField"
+            label="Enter Valid NASA Key"
+            size="small"
+            style={{width: 200, margin: "0px 8px 0px 0px"}} 
+            defaultValue={nasaKey}
+            type="text"
+          />
+          <Button 
+            variant="outlined" 
+            style={{color: "#223e4b", width:100, height: 40}} 
+            type="submit"
+          >Save</Button>
         </div>
       </Box>
     )
@@ -158,8 +156,25 @@ export default function Asteroids() {
     <div>
       <InputForm />
       <div>
-        <h2>{data.element_count} asteroids observed on {theDate}</h2>
-        <div>{asteroids.map(asteroid => (<span key={asteroid.id} style={{display: "block", cursor: "pointer"}}> &#129704; <AsteroidItem asteroid={asteroid} /> </span> ) )}</div>
+        <Accordion disableGutters sx={{backgroundColor: "transparent",boxShadow: "none", width: 500}}>
+          <AccordionSummary
+            expandIcon="[+]"
+            aria-controls="panel1-content"
+            id="panel1-header"
+            sx={{ backgroundColor: "transparent" }}
+          >
+            <h2>
+              {data.element_count} asteroids on {theDate}
+            </h2>
+          </AccordionSummary>
+          <AccordionDetails sx={{ backgroundColor: "transparent" }}>
+            {asteroids.map( (asteroid) => 
+              <span key={asteroid.id} style={{display: "block", cursor: "pointer"}}>
+                &#129704; <AsteroidItem asteroid={asteroid} /> 
+              </span> )
+            }
+          </AccordionDetails>
+        </Accordion>
       </div>
       <div className="canvas">
         <Canvas camera={{ fov: 40, near: 0.1, far: 1000, position: [0, 0, 30] }}>

@@ -17,7 +17,7 @@ export default function App() {
           <header>
               <h2 className='title'>Asteroids &#129704;</h2>          
               <p className='intro'>
-              Search near Earth asteroids by date. Data provided by <a href="https://api.nasa.gov/" className='intro' target="_blank" rel="noreferrer">NASA Asteroids - NeoWs API</a>
+              Observe near Earth asteroids. Data provided by <a href="https://api.nasa.gov/" className='intro' target="_blank" rel="noreferrer">NASA Asteroids - NeoWs API</a>
               </p>
           </header>
           <div className="content">
