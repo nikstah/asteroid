@@ -47,7 +47,8 @@ export default function Asteroids() {
   const [nasaKey, setNasaKey] = useState(
     window.localStorage.getItem("asteroids-nasa-key") || "DEMO_KEY"
   ); 
-  const [observeDate, setObserveDate] = useState(dayjs("2023-03-18"));
+  // const [observeDate, setObserveDate] = useState(dayjs("2023-03-18"));
+  const [observeDate, setObserveDate] = useState(new Date());
   const [orbit, setOrbit] = useState(true)
 
   const handleSubmit = (event) => {
@@ -156,7 +157,15 @@ export default function Asteroids() {
     <div>
       <InputForm />
       <div>
-        <Accordion disableGutters sx={{backgroundColor: "transparent",boxShadow: "none", width: 500}}>
+        <Accordion 
+          disableGutters 
+          sx={{
+            marginLeft: -2, 
+            backgroundColor: "transparent", 
+            boxShadow: "none", 
+            width: 450
+          }}
+        >
           <AccordionSummary
             expandIcon="[+]"
             aria-controls="panel1-content"
@@ -164,7 +173,7 @@ export default function Asteroids() {
             sx={{ backgroundColor: "transparent" }}
           >
             <h2>
-              {data.element_count} asteroids on {theDate}
+              {data.element_count} asteroids observed on {theDate}
             </h2>
           </AccordionSummary>
           <AccordionDetails sx={{ backgroundColor: "transparent" }}>
