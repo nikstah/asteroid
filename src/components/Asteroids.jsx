@@ -188,7 +188,7 @@ export default function Asteroids() {
             }
           }>
             {asteroids.map( (asteroid) => 
-              <span key={asteroid.id} style={{display: "block", cursor: "pointer", fontSize: "1em"}}>
+              <span key={asteroid.id} style={{display: "block", cursor: "pointer", fontSize: "12px"}}>
                 &#129704; <AsteroidItem asteroid={asteroid} /> 
               </span> )
             }
