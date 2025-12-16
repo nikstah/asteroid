@@ -163,7 +163,8 @@ export default function Asteroids() {
             backgroundColor: "transparent", 
             boxShadow: "none", 
             width: 450,
-            color: "#223e4b"
+            color: "#223e4b",
+            WebkitTextSizeAdjust: "100%"            
           }}
         >
           <AccordionSummary
@@ -188,7 +189,7 @@ export default function Asteroids() {
             }
           }>
             {asteroids.map( (asteroid) => 
-              <span key={asteroid.id} style={{display: "block", cursor: "pointer", fontSize: "12px"}}>
+              <span key={asteroid.id} style={{display: "block", cursor: "pointer", fontSize: "1em"}}>
                 &#129704; <AsteroidItem asteroid={asteroid} /> 
               </span> )
             }
