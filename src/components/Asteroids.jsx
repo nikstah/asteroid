@@ -16,7 +16,7 @@ import Probe from "./Probe";
 
 // Asteroid list item formatter
 const AsteroidItem = ({asteroid}) => {
-    return <span className='intro'>{asteroid.name}, dia {asteroid.diameter_min} - {asteroid.diameter_max} meters, {asteroid.distance} km from earth</span>
+    return <span>{asteroid.name}, dia {asteroid.diameter_min} - {asteroid.diameter_max} meters, {asteroid.distance} km from earth</span>
   }
 
 // Fetches asteroids from data and creates a sorted Array by distance from Earth
@@ -162,7 +162,8 @@ export default function Asteroids() {
           sx={{
             backgroundColor: "transparent", 
             boxShadow: "none", 
-            width: 450
+            width: 450,
+            color: "#223e4b"
           }}
         >
           <AccordionSummary
@@ -172,7 +173,7 @@ export default function Asteroids() {
             sx={{ 
               margin: "0px",
               padding: "0px 0px 0px 0px",
-              backgroundColor: "transparent" 
+              backgroundColor: "transparent"
             }}
           >
             <h2>
@@ -183,7 +184,8 @@ export default function Asteroids() {
             sx={{ 
               margin: "0px 0px",
               padding: "0px 0px 0px 0px",
-              backgroundColor: "transparent" 
+              backgroundColor: "transparent",
+              fontSize: "1em"
             }
           }>
             {asteroids.map( (asteroid) => 
