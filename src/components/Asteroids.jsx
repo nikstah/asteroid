@@ -16,7 +16,7 @@ import Probe from "./Probe";
 
 // Asteroid list item formatter
 const AsteroidItem = ({asteroid}) => {
-    return <span>{asteroid.name}, dia {asteroid.diameter_min} - {asteroid.diameter_max} meters, {asteroid.distance} km from earth</span>
+    return <span className='intro'>{asteroid.name}, dia {asteroid.diameter_min} - {asteroid.diameter_max} meters, {asteroid.distance} km from earth</span>
   }
 
 // Fetches asteroids from data and creates a sorted Array by distance from Earth
@@ -160,7 +160,6 @@ export default function Asteroids() {
         <Accordion 
           disableGutters 
           sx={{
-            marginLeft: -2, 
             backgroundColor: "transparent", 
             boxShadow: "none", 
             width: 450
@@ -170,13 +169,23 @@ export default function Asteroids() {
             expandIcon="[+]"
             aria-controls="panel1-content"
             id="panel1-header"
-            sx={{ backgroundColor: "transparent" }}
+            sx={{ 
+              margin: "0px",
+              padding: "0px 0px 0px 0px",
+              backgroundColor: "transparent" 
+            }}
           >
             <h2>
               {data.element_count} asteroids observed on {theDate}
             </h2>
           </AccordionSummary>
-          <AccordionDetails sx={{ backgroundColor: "transparent" }}>
+          <AccordionDetails 
+            sx={{ 
+              margin: "0px 0px",
+              padding: "0px 0px 0px 0px",
+              backgroundColor: "transparent" 
+            }
+          }>
             {asteroids.map( (asteroid) => 
               <span key={asteroid.id} style={{display: "block", cursor: "pointer"}}>
                 &#129704; <AsteroidItem asteroid={asteroid} /> 
