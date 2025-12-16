@@ -185,11 +185,10 @@ export default function Asteroids() {
               margin: "0px 0px",
               padding: "0px 0px 0px 0px",
               backgroundColor: "transparent",
-              fontSize: "1em"
             }
           }>
             {asteroids.map( (asteroid) => 
-              <span key={asteroid.id} style={{display: "block", cursor: "pointer"}}>
+              <span key={asteroid.id} style={{display: "block", cursor: "pointer", fontSize: "1em"}}>
                 &#129704; <AsteroidItem asteroid={asteroid} /> 
               </span> )
             }
